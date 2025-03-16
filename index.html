@@ -11,10 +11,15 @@
     <header class="hero">
         <div class="hero-content">
             <h1>Your Personalized Nutrition Plan</h1>
-            <p>Powered by Machine Learning</p>
+            <p>AI-powered dietary recommendations tailored for you</p>
             
             <div class="plan-form">
                 <form id="nutritionForm">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" placeholder="Enter your name" required>
+                    </div>
+
                     <div class="form-group">
                         <label for="diet">Dietary Preferences</label>
                         <div class="select-wrapper">
@@ -23,23 +28,38 @@
                                 <option value="vegan">Vegan</option>
                                 <option value="high-protein">High Protein</option>
                                 <option value="low-carb">Low Carb</option>
+                                <option value="keto">Keto</option>
+                                <option value="mediterranean">Mediterranean</option>
+                                <option value="pescatarian">Pescatarian</option>
+                                <option value="gluten-free">Gluten-Free</option>
+                                <option value="dairy-free">Dairy-Free</option>
+                                <option value="paleo">Paleo</option>
+                                <option value="diabetes-friendly">Diabetes-Friendly</option>
+                                <option value="budget-friendly">Budget-Friendly</option>
                             </select>
                         </div>
+                        <p class="form-hint">Hold Ctrl/Cmd to select multiple options</p>
                     </div>
 
                     <div class="form-group">
-                        <label for="goal">Health Goal</label>
+                        <label for="goal">Primary Health Goal</label>
                         <div class="select-wrapper">
                             <select id="goal" required>
                                 <option value="weight-loss">Weight Loss</option>
                                 <option value="muscle-gain">Muscle Gain</option>
                                 <option value="general-health">General Health</option>
+                                <option value="heart-health">Heart Health</option>
+                                <option value="athletic-performance">Athletic Performance</option>
+                                <option value="pregnancy">Pregnancy Nutrition</option>
+                                <option value="senior-health">Senior Health</option>
+                                <option value="mass-gain">Mass Gain</option>
+                                <option value="digestive-health">Digestive Health</option>
                             </select>
                         </div>
                     </div>
 
                     <button type="submit" class="cta-button">
-                        <span class="button-text">Generate Plan</span>
+                        <span class="button-text">Generate My Plan</span>
                         <i class="fas fa-arrow-right"></i>
                     </button>
                 </form>
@@ -53,56 +73,65 @@
     </div>
 
     <section id="resultSection" class="result-section hidden">
-        <div class="result-card">
-            <h2>Your AI-Generated Plan</h2>
+        <!-- Plan Selection Cards -->
+        <div class="plan-options" id="planOptions"></div>
+
+        <!-- Detailed Plan Display -->
+        <div class="result-card" id="planDetails">
+            <div class="plan-header">
+                <h2><span id="userName"></span>'s Nutrition Plan</h2>
+                <p class="plan-type" id="planType"></p>
+            </div>
             
             <div class="plan-details">
-                <div class="meal-card breakfast">
-                    <h3><i class="fas fa-sun"></i> Breakfast</h3>
-                    <p id="breakfastMeal">Loading...</p>
-                    <div class="nutrition-facts">
-                        <span><i class="fas fa-fire"></i> <span id="breakfastCalories">0</span> kcal</span>
-                        <span><i class="fas fa-dumbbell"></i> <span id="breakfastProtein">0</span>g protein</span>
+                <div class="meal-section">
+                    <div class="meal-card breakfast">
+                        <h3><i class="fas fa-sun"></i> Breakfast</h3>
+                        <p id="breakfastMeal" class="meal-description"></p>
+                        <div class="nutrition-facts">
+                            <span><i class="fas fa-fire"></i> <span id="breakfastCalories">0</span> kcal</span>
+                            <span><i class="fas fa-dumbbell"></i> <span id="breakfastProtein">0</span>g protein</span>
+                        </div>
+                    </div>
+
+                    <div class="meal-card lunch">
+                        <h3><i class="fas fa-cloud-sun"></i> Lunch</h3>
+                        <p id="lunchMeal" class="meal-description"></p>
+                        <div class="nutrition-facts">
+                            <span><i class="fas fa-fire"></i> <span id="lunchCalories">0</span> kcal</span>
+                            <span><i class="fas fa-dumbbell"></i> <span id="lunchProtein">0</span>g protein</span>
+                        </div>
+                    </div>
+
+                    <div class="meal-card dinner">
+                        <h3><i class="fas fa-moon"></i> Dinner</h3>
+                        <p id="dinnerMeal" class="meal-description"></p>
+                        <div class="nutrition-facts">
+                            <span><i class="fas fa-fire"></i> <span id="dinnerCalories">0</span> kcal</span>
+                            <span><i class="fas fa-dumbbell"></i> <span id="dinnerProtein">0</span>g protein</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="meal-card lunch">
-                    <h3><i class="fas fa-cloud-sun"></i> Lunch</h3>
-                    <p id="lunchMeal">Loading...</p>
-                    <div class="nutrition-facts">
-                        <span><i class="fas fa-fire"></i> <span id="lunchCalories">0</span> kcal</span>
-                        <span><i class="fas fa-dumbbell"></i> <span id="lunchProtein">0</span>g protein</span>
-                    </div>
-                </div>
-
-                <div class="meal-card dinner">
-                    <h3><i class="fas fa-moon"></i> Dinner</h3>
-                    <p id="dinnerMeal">Loading...</p>
-                    <div class="nutrition-facts">
-                        <span><i class="fas fa-fire"></i> <span id="dinnerCalories">0</span> kcal</span>
-                        <span><i class="fas fa-dumbbell"></i> <span id="dinnerProtein">0</span>g protein</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="macros-summary">
-                <h3><i class="fas fa-chart-pie"></i> Daily Nutrition Summary</h3>
-                <div class="macros-grid">
-                    <div class="macro-item">
-                        <div class="macro-label">Total Calories</div>
-                        <div class="macro-value" id="totalCalories">0</div>
-                    </div>
-                    <div class="macro-item">
-                        <div class="macro-label">Protein</div>
-                        <div class="macro-value" id="proteinValue">0g</div>
-                    </div>
-                    <div class="macro-item">
-                        <div class="macro-label">Carbs</div>
-                        <div class="macro-value" id="carbsValue">0g</div>
-                    </div>
-                    <div class="macro-item">
-                        <div class="macro-label">Fats</div>
-                        <div class="macro-value" id="fatsValue">0g</div>
+                <div class="macros-summary">
+                    <h3><i class="fas fa-chart-pie"></i> Daily Nutrition Summary</h3>
+                    <div class="macros-grid">
+                        <div class="macro-item">
+                            <div class="macro-label">Total Calories</div>
+                            <div class="macro-value" id="totalCalories">0</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-label">Protein</div>
+                            <div class="macro-value" id="proteinValue">0g</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-label">Carbohydrates</div>
+                            <div class="macro-value" id="carbsValue">0g</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-label">Fats</div>
+                            <div class="macro-value" id="fatsValue">0g</div>
+                        </div>
                     </div>
                 </div>
             </div>
