@@ -160,10 +160,16 @@ select:focus {
     margin-bottom: 1rem;
 }
 
+.meal-card h3 i {
+    margin-right: 0.5rem;
+}
+
 .nutrition-facts {
     display: flex;
     gap: 1rem;
     margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--dark);
 }
 
 .nutrition-facts span {
@@ -172,8 +178,21 @@ select:focus {
     gap: 0.5rem;
 }
 
+.nutrition-facts i {
+    color: var(--primary);
+}
+
 .macros-summary {
     margin-top: 2rem;
+}
+
+.macros-summary h3 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.macros-summary h3 i {
+    margin-right: 0.5rem;
 }
 
 .macros-grid {
@@ -215,6 +234,7 @@ select:focus {
     align-items: center;
     gap: 0.5rem;
     animation: fadeIn 0.3s ease;
+    z-index: 1000;
 }
 
 @keyframes fadeIn {
