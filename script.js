@@ -1,5 +1,5 @@
 // API Configuration
-const API_URL = 'https://nutrition-jetzy-backend.onrender.com/plan'; // Replace with your Render URL
+const API_URL = 'https://your-backend.onrender.com/plan';
 
 // DOM Elements
 const form = document.getElementById('nutritionForm');
@@ -67,19 +67,33 @@ function getFormData() {
 }
 
 async function fetchPlan(formData) {
-    const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-    });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 120000); // 2-minute timeout
 
-    if (!response.ok) {
-        throw new Error('Failed to fetch plan');
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+            signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to fetch plan');
+        }
+
+        return await response.json();
+    } catch (error) {
+        if (error.name === 'AbortError') {
+            throw new Error('Request timed out after 2 minutes. Please try again.');
+        }
+        throw error;
     }
-
-    return await response.json();
 }
 
 function updatePlanUI(plan) {
