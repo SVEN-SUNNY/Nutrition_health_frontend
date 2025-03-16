@@ -1,6 +1,7 @@
 // API Configuration
-const API_URL = 'https://nutrition-jetzy-backend.onrender.com/plan'; 
+const API_URL = 'https://nutrition-jetzy-backend.onrender.com/plan';
 
+// DOM Elements
 const form = document.getElementById('nutritionForm');
 const loader = document.getElementById('loader');
 const resultSection = document.getElementById('resultSection');
@@ -31,21 +32,11 @@ const macroElements = {
   fats: document.getElementById('totalFats')
 };
 
-// Global Abort Controller
-let abortController = null;
-
 // Event Listeners
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   
   try {
-    // Abort previous request if exists
-    if (abortController) abortController.abort();
-    
-    // Initialize new abort controller
-    abortController = new AbortController();
-    const signal = abortController.signal;
-    
     // Show loading state
     toggleLoading(true);
     clearErrors();
@@ -54,15 +45,19 @@ form.addEventListener('submit', async (e) => {
     const formData = getFormData();
     validateFormData(formData);
     
-    // Fetch plan with timeout
-    const plan = await fetchWithTimeout(API_URL, {
+    // Fetch plan without timeout
+    const response = await fetch(API_URL, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(formData),
-      signal
-    }, 10000); // 10 second timeout
+      body: JSON.stringify(formData)
+    });
 
-    // Update UI with received plan
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Server returned an error');
+    }
+    
+    const plan = await response.json();
     updatePlanUI(plan);
     
   } catch (error) {
@@ -86,47 +81,26 @@ function validateFormData(formData) {
   if (!formData.goal) throw new Error('Please select a health goal');
 }
 
-async function fetchWithTimeout(url, options, timeout) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeout);
-  
-  try {
-    const response = await fetch(url, {
-      ...options,
-      signal: controller.signal
-    });
-    
-    clearTimeout(timeoutId);
-    
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('API Error Response:', errorData);
-      throw new Error(errorData.error || 'Server returned an error');
-    }
-    
-    return await response.json();
-    
-  } catch (error) {
-    console.error('Fetch Error:', error);
-    throw error;
-  }
-}
-
 function updatePlanUI(plan) {
-  // Update meals
-  Object.entries(mealElements).forEach(([mealType, elements]) => {
-    elements.meal.textContent = plan.meals[mealType];
-    elements.calories.textContent = plan.macros[mealType].calories;
-    elements.protein.textContent = plan.macros[mealType].protein;
-  });
+  try {
+    // Update meals
+    Object.entries(mealElements).forEach(([mealType, elements]) => {
+      elements.meal.textContent = plan.meals[mealType] || 'Not available';
+      elements.calories.textContent = plan.macros[mealType]?.calories ?? 'N/A';
+      elements.protein.textContent = plan.macros[mealType]?.protein ?? 'N/A';
+    });
 
-  // Update macros
-  Object.entries(macroElements).forEach(([macroType, element]) => {
-    element.textContent = `${plan.macros.daily[macroType]}g`;
-  });
+    // Update macros
+    Object.entries(macroElements).forEach(([macroType, element]) => {
+      element.textContent = `${plan.macros.daily?.[macroType] ?? 'N/A'}g`;
+    });
 
-  // Show results
-  resultSection.classList.remove('hidden');
+    // Show results
+    resultSection.classList.remove('hidden');
+  } catch (error) {
+    console.error('UI Update Error:', error);
+    showError('Failed to display plan. Invalid data format.');
+  }
 }
 
 function toggleLoading(show) {
@@ -137,8 +111,8 @@ function toggleLoading(show) {
 function handleError(error) {
   console.error('Application Error:', error);
   
-  const errorMessage = error.name === 'AbortError' 
-    ? 'Request timed out. Please try again.'
+  const errorMessage = error.message.includes('Failed to fetch') 
+    ? 'Connection to server failed. Please check your internet connection.'
     : error.message || 'Failed to generate plan. Please try again later.';
 
   showError(errorMessage);
