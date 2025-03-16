@@ -1,3 +1,4 @@
+/* General Styles */
 :root {
     --primary: #2ECC71;
     --secondary: #27AE60;
@@ -19,6 +20,7 @@ body {
     line-height: 1.6;
 }
 
+/* Hero Section */
 .hero {
     background: linear-gradient(rgba(44,62,80,0.9), rgba(44,62,80,0.9)),
                 url('https://images.unsplash.com/photo-1498837167922-ddd27525d352?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
@@ -29,9 +31,20 @@ body {
     color: white;
 }
 
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+/* Form Styles */
 .plan-form {
     max-width: 600px;
-    margin: 2rem auto;
+    margin: 0 auto;
     background: rgba(255,255,255,0.9);
     padding: 2rem;
     border-radius: 15px;
@@ -40,6 +53,13 @@ body {
 
 .form-group {
     margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--dark);
 }
 
 .select-wrapper {
@@ -54,8 +74,15 @@ select {
     background: white;
     appearance: none;
     font-size: 1rem;
+    color: var(--dark);
 }
 
+select:focus {
+    outline: none;
+    border-color: var(--secondary);
+}
+
+/* Buttons */
 .cta-button {
     background: var(--primary);
     color: white;
@@ -70,6 +97,11 @@ select {
     transition: background 0.3s ease;
 }
 
+.cta-button:hover {
+    background: var(--secondary);
+}
+
+/* Loader */
 .loader {
     position: fixed;
     top: 0;
@@ -77,7 +109,7 @@ select {
     width: 100%;
     height: 100%;
     background: rgba(255,255,255,0.9);
-    display: none;
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -102,8 +134,8 @@ select {
     100% { transform: rotate(360deg); }
 }
 
+/* Results Section */
 .result-section {
-    display: none;
     padding: 2rem;
     max-width: 800px;
     margin: 2rem auto;
@@ -123,6 +155,27 @@ select {
     margin: 1rem 0;
 }
 
+.meal-card h3 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.nutrition-facts {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.nutrition-facts span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.macros-summary {
+    margin-top: 2rem;
+}
+
 .macros-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -130,6 +183,25 @@ select {
     margin-top: 1rem;
 }
 
+.macro-item {
+    background: var(--light);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.macro-label {
+    color: var(--dark);
+    font-weight: 600;
+}
+
+.macro-value {
+    color: var(--primary);
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+}
+
+/* Error Messages */
 .error-message {
     position: fixed;
     bottom: 1rem;
@@ -142,11 +214,22 @@ select {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    animation: fadeIn 0.3s ease;
 }
 
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
     .hero {
         padding: 2rem 1rem;
+    }
+    
+    .plan-form {
+        padding: 1rem;
     }
     
     .macros-grid {
