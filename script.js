@@ -30,11 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const responseData = await response.json();
 
-            if (!response.ok) {
-                throw new Error(responseData.error || 'Server error occurred');
-            }
-
-            if (!responseData.success) {
+            if (!response.ok || !responseData.success) {
                 throw new Error(responseData.error || 'Failed to generate plan');
             }
 
