@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('nutritionForm');
     const loader = document.getElementById('loader');
@@ -60,15 +59,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function displayPlan(plan) {
+        // Update meals
         document.getElementById('breakfastMeal').textContent = plan.meals.breakfast;
         document.getElementById('lunchMeal').textContent = plan.meals.lunch;
         document.getElementById('dinnerMeal').textContent = plan.meals.dinner;
 
-        document.getElementById('totalCalories').textContent = plan.calories;
-        document.getElementById('proteinValue').textContent = `${plan.macros.protein}g`;
-        document.getElementById('carbsValue').textContent = `${plan.macros.carbs}g`;
-        document.getElementById('fatsValue').textContent = `${plan.macros.fats}g`;
+        // Update meal macros
+        document.getElementById('breakfastCalories').textContent = plan.macros.breakfast.calories;
+        document.getElementById('breakfastProtein').textContent = plan.macros.breakfast.protein;
 
+        document.getElementById('lunchCalories').textContent = plan.macros.lunch.calories;
+        document.getElementById('lunchProtein').textContent = plan.macros.lunch.protein;
+
+        document.getElementById('dinnerCalories').textContent = plan.macros.dinner.calories;
+        document.getElementById('dinnerProtein').textContent = plan.macros.dinner.protein;
+
+        // Update daily macros
+        document.getElementById('totalCalories').textContent = plan.calories;
+        document.getElementById('proteinValue').textContent = `${plan.macros.daily.protein}g`;
+        document.getElementById('carbsValue').textContent = `${plan.macros.daily.carbs}g`;
+        document.getElementById('fatsValue').textContent = `${plan.macros.daily.fats}g`;
+
+        // Scroll to results
         resultSection.scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -81,9 +93,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function resetResults() {
+        // Reset meal names
         ['breakfastMeal', 'lunchMeal', 'dinnerMeal'].forEach(id => {
-            document.getElementById(id).textContent = '...';
+            document.getElementById(id).textContent = 'Loading...';
         });
+
+        // Reset meal macros
+        ['breakfastCalories', 'lunchCalories', 'dinnerCalories'].forEach(id => {
+            document.getElementById(id).textContent = '0';
+        });
+        ['breakfastProtein', 'lunchProtein', 'dinnerProtein'].forEach(id => {
+            document.getElementById(id).textContent = '0';
+        });
+
+        // Reset daily macros
         ['totalCalories', 'proteinValue', 'carbsValue', 'fatsValue'].forEach(id => {
             document.getElementById(id).textContent = '0';
         });
