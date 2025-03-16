@@ -1,124 +1,110 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize elements
     const form = document.getElementById('nutritionForm');
     const loader = document.getElementById('loader');
-    const resultSection = document.getElementById('resultSection');
-    const planOptionsContainer = document.getElementById('planOptions');
+    const resultsSection = document.getElementById('results');
     const API_URL = 'https://nutrition-jetzy-backend.onrender.com/plan';
     let currentPlans = [];
 
-    // Initially hide loader
-    loader.classList.add('hidden');
-
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const name = document.getElementById('name').value.trim();
-        const diet = Array.from(document.querySelectorAll('#diet option:checked'))
-                      .map(option => option.value);
-        const goal = document.getElementById('goal').value;
+        
+        const formData = {
+            name: document.getElementById('name').value.trim(),
+            diet: Array.from(document.querySelectorAll('#diet option:checked'))
+                      .map(option => option.value),
+            goal: document.getElementById('goal').value
+        };
 
-        if (!name || diet.length === 0 || !goal) {
-            showError('Please fill in all required fields');
-            return;
-        }
+        if (!validateForm(formData)) return;
 
         try {
-            toggleLoading(true);
-            resetResults();
-
+            toggleLoader(true);
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, diet, goal }),
-                signal: AbortSignal.timeout(10000)
+                body: JSON.stringify(formData)
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const { plans } = await response.json();
-            currentPlans = plans;
-            displayPlanOptions(plans);
+            if (!response.ok) throw new Error('Failed to fetch plans');
+            
+            const data = await response.json();
+            if (!data.success) throw new Error(data.error || 'Unknown error');
+            
+            currentPlans = data.plans;
+            displayPlanOptions(currentPlans);
+            resultsSection.classList.remove('hidden');
 
         } catch (error) {
-            console.error('API Error:', error);
-            showError(error.name === 'AbortError' 
-                ? 'Request timed out. Check your connection.'
-                : 'Failed to generate plans. Please try again.');
+            showError(error.message);
         } finally {
-            toggleLoading(false);
+            toggleLoader(false);
         }
     });
 
+    function validateForm({ name, diet, goal }) {
+        if (!name || diet.length === 0 || !goal) {
+            showError('Please fill in all required fields');
+            return false;
+        }
+        return true;
+    }
+
+    function toggleLoader(show) {
+        loader.classList.toggle('hidden', !show);
+    }
+
     function displayPlanOptions(plans) {
-        planOptionsContainer.innerHTML = '';
+        const container = document.getElementById('planOptions');
+        container.innerHTML = '';
+
         plans.forEach(plan => {
             const planCard = document.createElement('div');
             planCard.className = 'plan-card';
             planCard.innerHTML = `
-                <div class="plan-card-header">
-                    <h3>${plan.name}</h3>
-                    ${plan.confidence ? `<div class="confidence">${(plan.confidence * 100).toFixed(1)}% match</div>` : ''}
+                <h3>${plan.name}</h3>
+                <div class="meal-preview">
+                    <p><strong>Breakfast:</strong> ${plan.meals.breakfast}</p>
+                    <p><strong>Lunch:</strong> ${plan.meals.lunch}</p>
+                    <p><strong>Dinner:</strong> ${plan.meals.dinner}</p>
                 </div>
-                <div class="plan-details">
-                    <div class="meal">
-                        <h4><i class="fas fa-sun"></i> Breakfast</h4>
-                        <p>${plan.meals.breakfast}</p>
-                    </div>
-                    <div class="meal">
-                        <h4><i class="fas fa-cloud-sun"></i> Lunch</h4>
-                        <p>${plan.meals.lunch}</p>
-                    </div>
-                    <div class="meal">
-                        <h4><i class="fas fa-moon"></i> Dinner</h4>
-                        <p>${plan.meals.dinner}</p>
-                    </div>
-                    <button class="select-btn" data-plan-id="${plan.id}">
-                        Select Plan
-                    </button>
-                </div>
+                <button class="select-btn" data-plan-id="${plan.id}">
+                    Select Plan
+                </button>
             `;
-            planCard.querySelector('.select-btn').addEventListener('click', handleSelection);
-            planOptionsContainer.appendChild(planCard);
-        });
-        resultSection.classList.remove('hidden');
-    }
 
-    async function handleSelection(e) {
-        const planId = parseInt(e.target.dataset.planId);
-        const selectedPlan = currentPlans.find(p => p.id === planId);
-
-        try {
-            toggleLoading(true);
-            await fetch('/selection', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: document.getElementById('name').value.trim(),
-                    diet: Array.from(document.querySelectorAll('#diet option:checked')),
-                    goal: document.getElementById('goal').value,
-                    selected_plan_id: planId
-                })
+            planCard.querySelector('.select-btn').addEventListener('click', (e) => {
+                handlePlanSelection(plan.id);
             });
-            displaySelectedPlan(selectedPlan);
+            
+            container.appendChild(planCard);
+        });
+    }
+
+    async function handlePlanSelection(planId) {
+        try {
+            toggleLoader(true);
+            const selectedPlan = currentPlans.find(p => p.id === planId);
+            
+            // Update UI
+            document.getElementById('userName').textContent = document.getElementById('name').value;
+            document.getElementById('breakfastMeal').textContent = selectedPlan.meals.breakfast;
+            document.getElementById('lunchMeal').textContent = selectedPlan.meals.lunch;
+            document.getElementById('dinnerMeal').textContent = selectedPlan.meals.dinner;
+            
+            // Update nutrition values
+            document.getElementById('totalCalories').textContent = selectedPlan.calories;
+            document.getElementById('proteinTotal').textContent = `${selectedPlan.macros.daily.protein}g`;
+            document.getElementById('carbsTotal').textContent = `${selectedPlan.macros.daily.carbs}g`;
+            document.getElementById('fatsTotal').textContent = `${selectedPlan.macros.daily.fats}g`;
+
+            // Show details section
+            document.getElementById('planDetails').classList.remove('hidden');
+
         } catch (error) {
-            showError('Failed to save selection');
+            showError('Failed to load plan details');
         } finally {
-            toggleLoading(false);
+            toggleLoader(false);
         }
-    }
-
-    function displaySelectedPlan(plan) {
-        planOptionsContainer.classList.add('hidden');
-        document.getElementById('userName').textContent = document.getElementById('name').value.trim();
-        // Update all meal and nutrition elements...
-        resultSection.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function toggleLoading(show) {
-        loader.classList.toggle('hidden', !show);
-        resultSection.classList.toggle('hidden', show);
     }
 
     function showError(message) {
@@ -127,9 +113,5 @@ document.addEventListener('DOMContentLoaded', () => {
         errorEl.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
         document.body.appendChild(errorEl);
         setTimeout(() => errorEl.remove(), 5000);
-    }
-
-    function resetResults() {
-        // Reset all result fields to initial state
     }
 });
