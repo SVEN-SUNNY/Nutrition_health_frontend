@@ -1,14 +1,14 @@
 #planDetails h2 {
-    margin-top: 30px; /* Space before */
-    margin-bottom: 30px; /* Space after */
+    margin-top: 30px; 
+    margin-bottom: 30px; 
 }
 
-/* Add space before "Daily Summary" */
+
 .macros-summary h3 {
-    margin-top: 30px; /* Space before */
+    margin-top: 30px; 
 }
 
-/* General improvements and optimizations */
+
 :root {
     --primary: #2ECC71;
     --secondary: #27AE60;
