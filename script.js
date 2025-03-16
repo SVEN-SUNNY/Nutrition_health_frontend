@@ -6,24 +6,6 @@ const form = document.getElementById('nutritionForm');
 const loader = document.getElementById('loader');
 const resultSection = document.getElementById('resultSection');
 
-// Meal Elements
-const breakfastMeal = document.getElementById('breakfastMeal');
-const breakfastCalories = document.getElementById('breakfastCalories');
-const breakfastProtein = document.getElementById('breakfastProtein');
-
-const lunchMeal = document.getElementById('lunchMeal');
-const lunchCalories = document.getElementById('lunchCalories');
-const lunchProtein = document.getElementById('lunchProtein');
-
-const dinnerMeal = document.getElementById('dinnerMeal');
-const dinnerCalories = document.getElementById('dinnerCalories');
-const dinnerProtein = document.getElementById('dinnerProtein');
-
-// Macro Elements
-const totalProtein = document.getElementById('totalProtein');
-const totalCarbs = document.getElementById('totalCarbs');
-const totalFats = document.getElementById('totalFats');
-
 // Event Listeners
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -49,6 +31,7 @@ form.addEventListener('submit', async (e) => {
         
     } catch (error) {
         // Handle errors
+        console.error('Error:', error); // Log to console for debugging
         showError(error.message);
     } finally {
         // Hide loader and show results
@@ -92,30 +75,30 @@ async function fetchPlan(formData) {
         if (error.name === 'AbortError') {
             throw new Error('Request timed out after 2 minutes. Please try again.');
         }
-        throw error;
+        throw new Error(`API Error: ${error.message}`);
     }
 }
 
 function updatePlanUI(plan) {
     // Update breakfast
-    breakfastMeal.textContent = plan.meals.breakfast;
-    breakfastCalories.textContent = plan.macros.breakfast.calories;
-    breakfastProtein.textContent = plan.macros.breakfast.protein;
+    document.getElementById('breakfastMeal').textContent = plan.meals.breakfast;
+    document.getElementById('breakfastCalories').textContent = plan.macros.breakfast.calories;
+    document.getElementById('breakfastProtein').textContent = plan.macros.breakfast.protein;
 
     // Update lunch
-    lunchMeal.textContent = plan.meals.lunch;
-    lunchCalories.textContent = plan.macros.lunch.calories;
-    lunchProtein.textContent = plan.macros.lunch.protein;
+    document.getElementById('lunchMeal').textContent = plan.meals.lunch;
+    document.getElementById('lunchCalories').textContent = plan.macros.lunch.calories;
+    document.getElementById('lunchProtein').textContent = plan.macros.lunch.protein;
 
     // Update dinner
-    dinnerMeal.textContent = plan.meals.dinner;
-    dinnerCalories.textContent = plan.macros.dinner.calories;
-    dinnerProtein.textContent = plan.macros.dinner.protein;
+    document.getElementById('dinnerMeal').textContent = plan.meals.dinner;
+    document.getElementById('dinnerCalories').textContent = plan.macros.dinner.calories;
+    document.getElementById('dinnerProtein').textContent = plan.macros.dinner.protein;
 
     // Update totals
-    totalProtein.textContent = `${plan.macros.daily.protein}g`;
-    totalCarbs.textContent = `${plan.macros.daily.carbs}g`;
-    totalFats.textContent = `${plan.macros.daily.fats}g`;
+    document.getElementById('totalProtein').textContent = `${plan.macros.daily.protein}g`;
+    document.getElementById('totalCarbs').textContent = `${plan.macros.daily.carbs}g`;
+    document.getElementById('totalFats').textContent = `${plan.macros.daily.fats}g`;
 }
 
 function toggleLoader(show) {
@@ -144,9 +127,9 @@ function showError(message) {
 // Initialization
 function init() {
     // Set default values
-    breakfastMeal.textContent = 'Oatmeal with berries';
-    lunchMeal.textContent = 'Grilled chicken salad';
-    dinnerMeal.textContent = 'Salmon with veggies';
+    document.getElementById('breakfastMeal').textContent = 'Oatmeal with berries';
+    document.getElementById('lunchMeal').textContent = 'Grilled chicken salad';
+    document.getElementById('dinnerMeal').textContent = 'Salmon with veggies';
     
     // Hide loader and results initially
     toggleLoader(false);
@@ -155,3 +138,4 @@ function init() {
 
 // Run initialization
 init();
+
