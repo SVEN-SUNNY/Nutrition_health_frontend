@@ -1,4 +1,3 @@
-/* ================ Base Styles ================ */
 :root {
     --primary: #2ECC71;
     --secondary: #27AE60;
@@ -6,318 +5,100 @@
     --light: #ECF0F1;
     --error: #E74C3C;
     --transition: all 0.3s ease;
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', system-ui, sans-serif;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
 }
 
 body {
-    background: var(--light);
-    color: var(--dark);
     line-height: 1.6;
-    min-height: 100vh;
+    color: var(--dark);
 }
 
-/* ================ Hero Section ================ */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
 .hero {
-    background: linear-gradient(rgba(44, 62, 80, 0.95), rgba(44, 62, 80, 0.95)),
+    background: linear-gradient(rgba(44, 62, 80, 0.9), rgba(44, 62, 80, 0.9)),
                 url('https://images.unsplash.com/photo-1498837167922-ddd27525d352');
-    background-size: cover;
-    background-position: center;
-    padding: 4rem 2rem;
-    text-align: center;
     color: white;
-    box-shadow: var(--shadow);
+    padding: 4rem 0;
+    text-align: center;
 }
 
-.hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    font-weight: 700;
-}
-
-.hero p {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-    opacity: 0.9;
-}
-
-/* ================ Form Styles ================ */
 .plan-form {
-    max-width: 800px;
-    margin: 2rem auto;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.9);
     padding: 2rem;
-    border-radius: 15px;
-    box-shadow: var(--shadow);
+    border-radius: 10px;
+    max-width: 600px;
+    margin: 2rem auto;
 }
 
 .form-group {
     margin-bottom: 1.5rem;
-    position: relative;
 }
 
-.form-group label {
+label {
     display: block;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
     font-weight: 600;
-    color: var(--dark);
 }
 
-input[type="text"],
-select {
+input, select {
     width: 100%;
-    padding: 1rem;
+    padding: 0.8rem;
     border: 2px solid var(--primary);
-    border-radius: 8px;
+    border-radius: 5px;
     font-size: 1rem;
-    transition: var(--transition);
-    background: white;
 }
 
-input[type="text"]:focus,
-select:focus {
-    outline: none;
-    border-color: var(--secondary);
-    box-shadow: 0 0 8px rgba(46, 204, 113, 0.2);
+select[multiple] {
+    height: auto;
 }
 
-.select-wrapper::after {
-    content: "▼";
-    position: absolute;
-    right: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--primary);
-    pointer-events: none;
-}
-
-.form-hint {
-    font-size: 0.85rem;
-    color: #666;
-    margin-top: 0.5rem;
-}
-
-/* ================ Plan Cards ================ */
-.plan-options {
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    padding: 2rem;
-}
-
-.plan-card {
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    transition: var(--transition);
-    box-shadow: var(--shadow);
-    position: relative;
-    cursor: pointer;
-}
-
-.plan-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-}
-
-.plan-card-header {
-    padding: 1.5rem;
-    background: var(--primary);
-    color: white;
-    position: relative;
-}
-
-.plan-card-header h3 {
-    margin: 0;
-    font-size: 1.25rem;
-}
-
-.confidence-badge {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: var(--secondary);
-    padding: 0.25rem 0.75rem;
-    border-radius: 15px;
-    font-size: 0.85rem;
-    font-weight: 600;
-}
-
-.plan-card-body {
-    padding: 1.5rem;
-}
-
-.meal-preview p {
-    margin: 0.75rem 0;
-    color: #444;
-    line-height: 1.4;
-}
-
-.meal-preview strong {
-    color: var(--dark);
-    font-weight: 600;
-}
-
-.plan-stats {
-    display: flex;
-    gap: 1.5rem;
-    margin: 1.5rem 0;
-    padding: 1rem 0;
-    border-top: 2px solid var(--light);
-    border-bottom: 2px solid var(--light);
-}
-
-.stat-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--dark);
-}
-
-.stat-item i {
-    color: var(--primary);
-}
-
-.select-plan {
-    width: 100%;
+.cta-btn {
     background: var(--primary);
     color: white;
     border: none;
-    padding: 1rem;
+    padding: 1rem 2rem;
+    border-radius: 5px;
     font-size: 1rem;
     cursor: pointer;
     transition: var(--transition);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
 }
 
-.select-plan:hover {
+.cta-btn:hover {
     background: var(--secondary);
 }
 
-/* ================ Results Section ================ */
-.result-section {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 2rem;
-}
-
-.plan-header {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.plan-header h2 {
-    color: var(--dark);
-    margin-bottom: 0.5rem;
-}
-
-.plan-type {
-    color: var(--secondary);
-    font-weight: 600;
-    font-size: 1.1rem;
-}
-
-.meal-section {
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    margin-bottom: 2rem;
-}
-
-.meal-card {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: var(--shadow);
-    transition: var(--transition);
-}
-
-.meal-card:hover {
-    transform: translateY(-3px);
-}
-
-.meal-card h3 {
-    color: var(--primary);
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.nutrition-facts {
-    display: flex;
-    gap: 1.5rem;
-    margin-top: 1rem;
-    font-size: 0.9rem;
-}
-
-.nutrition-facts span {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-}
-
-.macros-summary {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: var(--shadow);
-}
-
-.macros-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-}
-
-.macro-item {
-    text-align: center;
-    padding: 1.5rem;
-    background: var(--light);
-    border-radius: 8px;
-}
-
-.macro-label {
-    color: #666;
-    font-size: 0.9rem;
-    margin-bottom: 0.5rem;
-}
-
-.macro-value {
-    color: var(--primary);
-    font-size: 1.5rem;
-    font-weight: 700;
-}
-
-/* ================ Loader & Errors ================ */
 .loader {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.9);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    backdrop-filter: blur(3px);
+}
+
+.loader.hidden {
+    display: none;
 }
 
 .spinner {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border: 4px solid var(--light);
     border-top-color: var(--primary);
     border-radius: 50%;
@@ -328,79 +109,51 @@ select:focus {
     to { transform: rotate(360deg); }
 }
 
+.results {
+    padding: 4rem 0;
+}
+
+.plan-options {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.meal-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.macros-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    margin-top: 1.5rem;
+}
+
 .error-message {
     position: fixed;
-    bottom: 2rem;
+    bottom: 1rem;
     left: 50%;
     transform: translateX(-50%);
     background: var(--error);
     color: white;
     padding: 1rem 2rem;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    animation: slideIn 0.3s ease;
+    border-radius: 5px;
 }
 
-@keyframes slideIn {
-    from { transform: translate(-50%, 100%); }
-    to { transform: translate(-50%, 0); }
-}
-
-/* ================ Responsive Design ================ */
 @media (max-width: 768px) {
+    .container {
+        padding: 0 1rem;
+    }
+    
     .hero {
-        padding: 2rem 1rem;
+        padding: 2rem 0;
     }
-
+    
     .plan-form {
-        margin: 1rem;
-        padding: 1.5rem;
-    }
-
-    .plan-options {
-        grid-template-columns: 1fr;
         padding: 1rem;
-    }
-
-    .macros-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .meal-section {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero h1 {
-        font-size: 2rem;
-    }
-
-    .plan-card-header h3 {
-        font-size: 1.1rem;
-    }
-
-    .nutrition-facts {
-        flex-direction: column;
-    }
-}
-
-/* ================ Print Styles ================ */
-@media print {
-    .hero, .plan-form, .loader {
-        display: none !important;
-    }
-
-    .result-section {
-        padding: 0;
-        box-shadow: none;
-    }
-
-    .meal-card, .macros-summary {
-        page-break-inside: avoid;
-        box-shadow: none;
-        border: 1px solid #ddd;
     }
 }
