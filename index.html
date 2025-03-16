@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NutriJet - AI Nutrition Planner</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header class="hero">
@@ -57,16 +57,35 @@
             <h2>Your AI-Generated Plan</h2>
             
             <div class="plan-details">
+                <!-- Breakfast -->
                 <div class="meal-card breakfast">
                     <h3><i class="fas fa-sun"></i> Breakfast</h3>
-                    <p id="breakfastMeal">Loading...</p>
+                    <p id="breakfastMeal">Oatmeal with berries and almonds</p>
                     <div class="nutrition-facts">
-                        <span class="calories"><i class="fas fa-fire"></i> <span id="breakfastCalories">0</span> kcal</span>
-                        <span class="protein"><i class="fas fa-dumbbell"></i> <span id="breakfastProtein">0</span>g protein</span>
+                        <span class="calories"><i class="fas fa-fire"></i> <span id="breakfastCalories">350</span> kcal</span>
+                        <span class="protein"><i class="fas fa-dumbbell"></i> <span id="breakfastProtein">12</span>g protein</span>
                     </div>
                 </div>
 
-                <!-- Repeat for Lunch and Dinner -->
+                <!-- Lunch -->
+                <div class="meal-card lunch">
+                    <h3><i class="fas fa-sun"></i> Lunch</h3>
+                    <p id="lunchMeal">Grilled chicken salad with quinoa</p>
+                    <div class="nutrition-facts">
+                        <span class="calories"><i class="fas fa-fire"></i> <span id="lunchCalories">450</span> kcal</span>
+                        <span class="protein"><i class="fas fa-dumbbell"></i> <span id="lunchProtein">30</span>g protein</span>
+                    </div>
+                </div>
+
+                <!-- Dinner -->
+                <div class="meal-card dinner">
+                    <h3><i class="fas fa-moon"></i> Dinner</h3>
+                    <p id="dinnerMeal">Salmon with roasted vegetables</p>
+                    <div class="nutrition-facts">
+                        <span class="calories"><i class="fas fa-fire"></i> <span id="dinnerCalories">500</span> kcal</span>
+                        <span class="protein"><i class="fas fa-dumbbell"></i> <span id="dinnerProtein">35</span>g protein</span>
+                    </div>
+                </div>
             </div>
 
             <div class="macros-summary">
@@ -74,16 +93,23 @@
                 <div class="macros-grid">
                     <div class="macro-item">
                         <div class="macro-label">Protein</div>
-                        <div class="macro-value" id="totalProtein">0g</div>
+                        <div class="macro-value" id="totalProtein">77g</div>
                     </div>
-                    <!-- Add Carbs and Fats similarly -->
+                    <div class="macro-item">
+                        <div class="macro-label">Carbs</div>
+                        <div class="macro-value" id="totalCarbs">120g</div>
+                    </div>
+                    <div class="macro-item">
+                        <div class="macro-label">Fats</div>
+                        <div class="macro-value" id="totalFats">45g</div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-    <script src="/script.js"></script>
+
     <script>
-        const API_URL = 'https://your-backend.onrender.com/plan'; // ← Use your Render URL
+        const API_URL = 'https://nutrition-jetzy-backend.onrender.com/plan'; // Replace with your Render URL
         
         document.getElementById('nutritionForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -123,14 +149,23 @@
         });
 
         function updatePlanUI(plan) {
-            // Update breakfast
+            // Update meals
             document.getElementById('breakfastMeal').textContent = plan.meals.breakfast;
             document.getElementById('breakfastCalories').textContent = plan.macros.breakfast.calories;
             document.getElementById('breakfastProtein').textContent = plan.macros.breakfast.protein;
-            
+
+            document.getElementById('lunchMeal').textContent = plan.meals.lunch;
+            document.getElementById('lunchCalories').textContent = plan.macros.lunch.calories;
+            document.getElementById('lunchProtein').textContent = plan.macros.lunch.protein;
+
+            document.getElementById('dinnerMeal').textContent = plan.meals.dinner;
+            document.getElementById('dinnerCalories').textContent = plan.macros.dinner.calories;
+            document.getElementById('dinnerProtein').textContent = plan.macros.dinner.protein;
+
             // Update totals
             document.getElementById('totalProtein').textContent = `${plan.macros.daily.protein}g`;
-            // Update other macros similarly
+            document.getElementById('totalCarbs').textContent = `${plan.macros.daily.carbs}g`;
+            document.getElementById('totalFats').textContent = `${plan.macros.daily.fats}g`;
         }
 
         function showError(message) {
